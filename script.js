@@ -34,8 +34,7 @@ function buscarPokemon() {
     let PokemonImagem
 
     const imagemGif =
-      pokemonData.sprites.versions["generation-v"]["black-white"].animated
-        .front_default;
+      pokemonData.sprites.versions["generation-v"]["black-white"].animated.front_default;
 
     if (imagemGif == null) {
        PokemonImagem = sprites.front_default;
