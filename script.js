@@ -60,9 +60,7 @@ function buscarPokemon() {
           <p><strong>Peso:</strong> ${peso} Kg</p>
           <p><strong>Nivel Base de Experiência:</strong> ${base_experience}</p>
           <p><strong>Habilidades:</strong> ${abilitiesNames}</p>
-          <p><strong>Tipo:</strong> ${types
-        .map((type) => type.type.name)
-        .join(", ")}</p>
+          <p><strong>Tipo:</strong> ${types.map((type) => type.type.name).join(", ")}</p>
           <p><strong>Numero:</strong> ${id}</p>
           <!-- Adicione outras informações que desejar -->
         `;
