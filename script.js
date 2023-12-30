@@ -47,12 +47,17 @@ function buscarPokemon() {
     // para converter Decimetros é Hectogramas em Metros é Kg 
     // é só dividir o valor de height e weight por 10
 
+    const altura = TrocarPontoPorVirgula(height / 10) 
+
+    const peso = TrocarPontoPorVirgula(weight / 10) 
+
+
     const resultDiv = document.getElementById("result");
     resultDiv.innerHTML = `
           <h2>${name}</h2>
           <img src="${PokemonImagem}" alt="${name}">
-          <p><strong>Altura:</strong> ${height / 10} Metros</p>
-          <p><strong>Peso:</strong> ${weight / 10} Kg</p>
+          <p><strong>Altura:</strong> ${altura} Metros</p>
+          <p><strong>Peso:</strong> ${peso} Kg</p>
           <p><strong>Nivel Base de Experiência:</strong> ${base_experience}</p>
           <p><strong>Habilidades:</strong> ${abilitiesNames}</p>
           <p><strong>Tipo:</strong> ${types
@@ -62,6 +67,10 @@ function buscarPokemon() {
           <!-- Adicione outras informações que desejar -->
         `;
   }
+}
+
+function TrocarPontoPorVirgula(valor) {
+  return valor.toString().replace(".", ",")
 }
 
 // Ouvinte de evento para o botão "Buscar"
