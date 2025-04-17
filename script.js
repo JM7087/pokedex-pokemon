@@ -6,8 +6,6 @@ function buscarPokemon() {
   const resultDiv = document.getElementById("result");
 
   if (pokemonNameOuNumero.trim() !== "") {
-
-    // Remove o display: none antes de começar a exibir os resultados
     resultDiv.style.display = "block";
 
     resultDiv.innerHTML = `
@@ -15,10 +13,40 @@ function buscarPokemon() {
           <img src="img/carregando.gif" alt="Carregando...">
         </div>`;
 
+    let pokemonDataGlobal = null;
+
     fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonNameOuNumero}`)
       .then((response) => response.json())
       .then((pokemonData) => {
-        exibirPokemon(pokemonData);
+        pokemonDataGlobal = pokemonData;
+        // Buscar a descrição do Pokémon
+        return fetch(`https://pokeapi.co/api/v2/pokemon-species/${pokemonNameOuNumero}`);
+      })
+      .then((response) => response.json())
+      .then((speciesData) => {
+       
+        
+          // Find an English flavor text entry
+          const flavorTextEntry = speciesData.flavor_text_entries.find(
+            entry => entry.language.name === 'en'
+          ) || speciesData.flavor_text_entries[0];
+        
+        const englishDescription = flavorTextEntry
+          ? flavorTextEntry.flavor_text.replace(/\n|\f/g, " ")
+          : "Description not available.";
+
+        // Translate to Portuguese using MyMemory API
+        fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(englishDescription)}&langpair=en|pt-BR`)
+        .then(response => response.json())
+        .then(data => {
+          const descricao = data.responseData?.translatedText || englishDescription;
+          exibirPokemon(pokemonDataGlobal, descricao);
+        })
+        .catch(error => {
+          console.error("Erro na tradução:", error);
+          // Fallback to English if translation fails
+          exibirPokemon(pokemonDataGlobal, englishDescription);
+        });
       })
       .catch((error) => {
         resultDiv.innerHTML =
@@ -27,7 +55,7 @@ function buscarPokemon() {
       });
   }
 
-  function exibirPokemon(pokemonData) {
+  function exibirPokemon(pokemonData, descricao) {
     const { name, height, weight, types, id, sprites, base_experience, abilities } = pokemonData;
 
     const abilitiesNames = abilities.map(ability => ability.ability.name).join(', ');
@@ -55,6 +83,7 @@ function buscarPokemon() {
           <p><strong>Nivel Base de Experiência:</strong> ${base_experience}</p>
           <p><strong>Habilidades:</strong> ${abilitiesNames}.</p>
           <p><strong>Tipo:</strong> ${types.map((type) => type.type.name).join(", ")}</p>
+          <p><strong>Descrição:</strong> ${descricao}</p>
           <p><strong>Numero:</strong> ${id}</p>
         `;
 
@@ -65,6 +94,7 @@ function buscarPokemon() {
           Nivel Base de Experiência ${base_experience}
           Habilidades ${abilitiesNames}
           Tipo ${types.map((type) => type.type.name).join(", ")}
+          Descrição ${descricao}
           Numero na Pokedex ${id}
         `;
 
@@ -74,6 +104,10 @@ function buscarPokemon() {
 
 function TrocarPontoPorVirgula(valor) {
   return valor.toString().replace(".", ",");
+}
+
+function exibirDescricao(descricao) {
+  return descricao
 }
 
 function falarTexto(dadosDoPokemon) {
