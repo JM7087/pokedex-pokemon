@@ -34,4 +34,4 @@ Contribuições são bem-vindas! Sinta-se à vontade para abrir problemas (issue
 
 Este projeto utiliza a [PokeAPI](https://pokeapi.co/) para obter informações dos Pokémon.
 
-Desenvolvido por [João Marcos](https://linkes.jm7087.com)
+Desenvolvido por [João Marcos](https://www.jmdos.com.br)
